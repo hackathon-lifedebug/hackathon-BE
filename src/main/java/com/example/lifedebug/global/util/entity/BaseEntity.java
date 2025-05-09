@@ -1,4 +1,4 @@
-package com.example.lifedebug.global.util;
+package com.example.lifedebug.global.util.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
