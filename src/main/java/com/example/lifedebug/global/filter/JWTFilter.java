@@ -30,6 +30,15 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String uri = request.getRequestURI();
+        System.out.println(">> 요청 URI: " + uri);
+
+        if (uri.startsWith("/auth/login") || uri.startsWith("/auth/signup")) {
+            System.out.println(">> 인증 예외 경로: " + uri);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 요청 헤더에서 Authorization 추출
         String authHeader = request.getHeader("Authorization");
 
@@ -40,7 +49,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String token = authHeader.replace("Bearer ", "");
 
-        String uri = request.getRequestURI();
         if (uri.equals("/auth/reissue")) {
             request.setAttribute("refreshToken", token);
         } else {
