@@ -22,6 +22,11 @@ public class MentorService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘토를 찾을 수 없습니다. ID: " + id));
     }
 
+    public Mentor findByLoginId(String loginId){
+        return mentorRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘토를 찾을 수 없습니다. ID: " + loginId));
+    }
+
     public Page<MentorSearchResponse> searchMentors(MentorSearchRequest request, Pageable pageable) {
         log.debug("SearchMentors - keyword: {}, city: {}, subject: {}, language: {}, minRating: {}",
                 request.getKeyword(), request.getCity(), request.getSubject(), request.getLanguage(), request.getMinRating());
