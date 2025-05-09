@@ -11,9 +11,9 @@ import java.util.List;
 
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
-    List<Calendar> findAllByMentorAndStartAtBetween(Mentor mentor, LocalDateTime start, LocalDateTime end
+    List<Calendar> findAllByMentorAndStartAtBetweenOrderByStartAtAsc(Mentor mentor, LocalDateTime start, LocalDateTime end
     );
 
-    List<Calendar> findAllByMenteeAndStartAtBetween(Mentee mentee, LocalDateTime start, LocalDateTime end
+    List<Calendar> findAllByMenteeAndStartAtBetweenOrderByStartAtAsc(Mentee mentee, LocalDateTime start, LocalDateTime end
     );
 }

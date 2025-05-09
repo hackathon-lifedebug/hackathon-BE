@@ -45,10 +45,10 @@ public class CalendarService {
         List<Calendar> calendars = new ArrayList<>();
         if (role.equals("MENTOR")) {
             Mentor mentor = mentorService.findByLoginId(loginId);
-            calendars = calendarRepository.findAllByMentorAndStartAtBetween(mentor, startOfMonth, endOfMonth);
+            calendars = calendarRepository.findAllByMentorAndStartAtBetweenOrderByStartAtAsc(mentor, startOfMonth, endOfMonth);
         } else if (role.equals("MENTEE")) {
             Mentee mentee = menteeService.findByLoginId(loginId);
-            calendars = calendarRepository.findAllByMenteeAndStartAtBetween(mentee, startOfMonth, endOfMonth);
+            calendars = calendarRepository.findAllByMenteeAndStartAtBetweenOrderByStartAtAsc(mentee, startOfMonth, endOfMonth);
         }
         return calendars.stream().map(calendarMapper::toResponseDto).toList();
     }
