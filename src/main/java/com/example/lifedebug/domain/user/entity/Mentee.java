@@ -1,8 +1,6 @@
 package com.example.lifedebug.domain.user.entity;
 
 import com.example.lifedebug.global.util.entity.BaseEntity;
-import com.example.lifedebug.global.util.entity.City;
-import com.example.lifedebug.global.util.entity.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 

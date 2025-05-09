@@ -1,10 +1,10 @@
 package com.example.lifedebug.domain.user.entity;
 
 import com.example.lifedebug.global.util.entity.BaseEntity;
-import com.example.lifedebug.global.util.entity.City;
-import com.example.lifedebug.global.util.entity.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,11 +32,25 @@ public class Mentor extends BaseEntity implements User {
 
     private City city;
 
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "mentor_subjects", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Column(name = "subject")
+    private List<Subject> subjects;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "mentor_languages", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Column(name = "language")
+    private List<Language> languages;
+
+    private Double rating;
+
+    private Integer reviewCnt;
+
     private String profileImage;
 
     private String description;
-
-    private int level;
 
     private boolean isActive;
 

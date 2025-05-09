@@ -13,26 +13,24 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MentorSignupRequest {
-    private String loginId;
-
-    private String password;
+public class MentorSearchResponse {
+    private Long id;
 
     private String name;
 
-    private String email;
-
-    private String phone;
-
-    private Gender gender;
-
     private City city;
 
-    private List<Language> languages;
-
     private List<Subject> subjects;
+
+    private Double rating;
+
+    private Integer reviewCnt;
+
+    private Gender gender;
 
     private String profileImage;
 
     private String description;
+
+    private List<Language> languages;
 }

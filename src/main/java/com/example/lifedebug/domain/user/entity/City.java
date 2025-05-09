@@ -1,4 +1,4 @@
-package com.example.lifedebug.global.util.entity;
+package com.example.lifedebug.domain.user.entity;
 
 import lombok.Getter;
 
