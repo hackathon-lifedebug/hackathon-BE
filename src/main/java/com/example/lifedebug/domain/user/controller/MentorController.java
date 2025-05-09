@@ -1,5 +1,6 @@
 package com.example.lifedebug.domain.user.controller;
 
+import com.example.lifedebug.domain.user.dto.MenteeResponse;
 import com.example.lifedebug.domain.user.dto.MentorSearchRequest;
 import com.example.lifedebug.domain.user.dto.MentorSearchResponse;
 import com.example.lifedebug.domain.user.service.MentorService;
@@ -10,7 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/mentors")
@@ -29,5 +34,13 @@ public class MentorController {
         Page<MentorSearchResponse> result = mentorService.searchMentors(request, pageable);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Page<MentorSearchResponse>>builder().success(200).message("멘토 조회에 성공했습니다.").data(result).build());
+    }
+
+    @GetMapping("/mentees")
+    public ResponseEntity<ApiResponse<List<MenteeResponse>>> getMenteesForMentor(@AuthenticationPrincipal UserDetails userDetails){
+        String loginId = userDetails.getUsername();
+        List<MenteeResponse> response = mentorService.findMenteesForMentor(loginId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MenteeResponse>>builder().success(200).message("멘티 목록 조회에 성공했습니다.").data(response).build());
     }
 }
