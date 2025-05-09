@@ -10,6 +10,8 @@ import com.example.lifedebug.domain.user.entity.Mentor;
 import com.example.lifedebug.domain.user.entity.User;
 import com.example.lifedebug.domain.user.repository.MenteeRepository;
 import com.example.lifedebug.domain.user.repository.MentorRepository;
+import com.example.lifedebug.global.code.ErrorCode;
+import com.example.lifedebug.global.exception.CustomException;
 import com.example.lifedebug.global.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +34,7 @@ public class AuthService {
 
     public void signupMentor(MentorSignupRequest request) {
         if (mentorRepository.existsByLoginId(request.getLoginId()) || menteeRepository.existsByLoginId(request.getLoginId())) {
-            throw new IllegalArgumentException("이미 존재하는 ID입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_LOGIN_ID);
         }
 
         Mentor mentor = Mentor.builder()
@@ -55,7 +57,7 @@ public class AuthService {
 
     public void signupMentee(MenteeSignupRequest request) {
         if (menteeRepository.existsByLoginId(request.getLoginId()) || menteeRepository.existsByLoginId(request.getLoginId())) {
-            throw new IllegalArgumentException("이미 존재하는 ID입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_LOGIN_ID);
         }
 
         Mentee mentee = Mentee.builder()
@@ -87,26 +89,26 @@ public class AuthService {
 
             return new LoginResponse(accessToken, refreshToken);
         } catch (BadCredentialsException e) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못되었습니다.");
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
     }
 
     public LoginResponse reissue(String refreshToken) {
         if (refreshToken == null) {
-            throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         refreshToken = refreshToken.replace("Bearer ", "");
 
         if (!jwtUtil.isValid(refreshToken) || !"refresh".equals(jwtUtil.getCategory(refreshToken))) {
-            throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         String loginId = jwtUtil.getSubject(refreshToken);
 
         String savedToken = tokenService.getRefreshToken(loginId);
         if(savedToken == null){
-            throw new IllegalArgumentException("리프레시 토큰이 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         CustomUserDetails userDetails = userService.loadUserDetailsByLoginId(loginId);

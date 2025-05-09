@@ -12,6 +12,8 @@ import com.example.lifedebug.domain.user.entity.Mentee;
 import com.example.lifedebug.domain.user.entity.Mentor;
 import com.example.lifedebug.domain.user.service.MenteeService;
 import com.example.lifedebug.domain.user.service.MentorService;
+import com.example.lifedebug.global.code.ErrorCode;
+import com.example.lifedebug.global.exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,6 @@ public class MatchingService {
     private final MenteeService menteeService;
     private final MatchingMapper matchingMapper;
 
-    // 매칭 요청 Post
     @Transactional
     public MenteeMatchingResponse requestMatching(MenteeMatchingRequest request){
         Mentee mentee = menteeService.findById(request.getMenteeId());
@@ -42,23 +43,20 @@ public class MatchingService {
         return matchingMapper.toMenteeResponse(matching);
     }
 
-    // 멘토의 매칭 승인 or 거절 Put
     @Transactional
     public MentorMatchingResponse respondToMatching(MentorMatchingRequest request){
         Matching matching = matchingRepository.findById(request.getMatchingId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 매칭 내역을 찾을 수 없습니다. ID: " + request.getMatchingId()));
+                .orElseThrow(() -> new CustomException(ErrorCode.MATCHING_NOT_FOUND));
         matching.setStatus(request.getStatus());
         return matchingMapper.toMentorResponse(matching);
     }
 
-    // 멘토의 매칭 (요청) 목록
     public Page<MentorMatchingResponse> findMatchingListForMentor(Long mentorId, Pageable pageable){
         Mentor mentor = mentorService.findById(mentorId);
         return matchingRepository.findByMentor(mentor, pageable)
                 .map(matchingMapper::toMentorResponse);
     }
 
-    // 멘티의 매칭 (요청) 목록
     public Page<MenteeMatchingResponse> findMatchingListForMentee(Long menteeId, Pageable pageable){
         Mentee mentee = menteeService.findById(menteeId);
         return matchingRepository.findByMentee(mentee, pageable)

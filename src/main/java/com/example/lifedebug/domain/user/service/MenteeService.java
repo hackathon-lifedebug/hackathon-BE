@@ -2,6 +2,8 @@ package com.example.lifedebug.domain.user.service;
 
 import com.example.lifedebug.domain.user.entity.Mentee;
 import com.example.lifedebug.domain.user.repository.MenteeRepository;
+import com.example.lifedebug.global.code.ErrorCode;
+import com.example.lifedebug.global.exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,11 @@ public class MenteeService {
 
     public Mentee findById(Long id){
         return menteeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘티를 찾을 수 없습니다. ID: " + id));
+                .orElseThrow(() -> new CustomException(ErrorCode.MENTEE_NOT_FOUND));
     }
 
     public Mentee findByLoginId(String loginId){
         return menteeRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘티를 찾을 수 없습니다. ID: " + loginId));
+                .orElseThrow(() -> new CustomException(ErrorCode.MENTEE_NOT_FOUND));
     }
 }
