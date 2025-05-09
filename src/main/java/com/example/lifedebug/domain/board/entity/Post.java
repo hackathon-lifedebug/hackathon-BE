@@ -6,6 +6,8 @@ import com.example.lifedebug.global.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -44,4 +46,8 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private boolean isPrivate;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true) // 삭제하면 디비에서도 삭제되게
+    private List<Comment> comments;
+
 }
