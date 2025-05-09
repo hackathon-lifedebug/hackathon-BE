@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class MatchingController {
     public ResponseEntity<Page<MentorMatchingResponse>> getMatchingListForMentor(@PathVariable Long mentorId,
                                                                                  @RequestParam(defaultValue = "0") int page,
                                                                                  @RequestParam(defaultValue = "7") int size){
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return ResponseEntity.status(HttpStatus.OK).body(matchingService.findMatchingListForMentor(mentorId, pageable));
     }
 
@@ -41,7 +42,7 @@ public class MatchingController {
     public ResponseEntity<Page<MenteeMatchingResponse>> getMatchingListForMentee(@PathVariable Long menteeId,
                                                                                  @RequestParam(defaultValue = "0") int page,
                                                                                  @RequestParam(defaultValue = "7") int size){
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return ResponseEntity.status(HttpStatus.OK).body(matchingService.findMatchingListForMentee(menteeId, pageable));
     }
 }
