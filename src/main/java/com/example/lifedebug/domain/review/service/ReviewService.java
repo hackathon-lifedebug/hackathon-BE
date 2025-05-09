@@ -1,5 +1,6 @@
 package com.example.lifedebug.domain.review.service;
 
+import com.example.lifedebug.domain.review.dto.MentorReviewResponse;
 import com.example.lifedebug.domain.review.dto.ReviewRequest;
 import com.example.lifedebug.domain.review.dto.ReviewResponse;
 import com.example.lifedebug.domain.review.entity.MentorReview;
@@ -33,13 +34,30 @@ public class ReviewService {
         review.setMentee(mentee);
 
         reviewRepository.save(review);
+
+        int prevCnt = mentor.getReviewCnt() != null ? mentor.getReviewCnt() : 0;
+        double prevRating = mentor.getRating() != null ? mentor.getRating() : 0.0;
+        int newCnt = prevCnt + 1;
+        double newRating = ((prevRating * prevCnt) + review.getRating()) / newCnt;
+
+        mentor.setReviewCnt(newCnt);
+        mentor.setRating(newRating);
+
         return reviewMapper.toResponseDto(review);
     }
 
-    public Page<ReviewResponse> findMentorReviews(Long mentorId, Pageable pageable){
+    public MentorReviewResponse findMentorReviews(Long mentorId, Pageable pageable){
         Mentor mentor = mentorService.findById(mentorId);
 
-        return reviewRepository.findByMentorOrderByCreatedAtDesc(mentor, pageable)
+        Page<ReviewResponse> reviews = reviewRepository.findByMentorOrderByCreatedAtDesc(mentor, pageable)
                 .map(reviewMapper::toResponseDto);
+
+        return MentorReviewResponse.builder()
+                .mentorId(mentor.getId())
+                .mentorName(mentor.getName())
+                .rating(mentor.getRating())
+                .reviewCnt(mentor.getReviewCnt())
+                .reviews(reviews)
+                .build();
     }
 }

@@ -13,8 +13,6 @@ public interface ReviewMapper {
     @Mapping(target = "mentee", ignore = true)
     MentorReview toEntity(ReviewRequest request);
 
-    @Mapping(source = "mentor.id", target = "mentorId")
-    @Mapping(source = "mentor.name", target = "mentorName")
     @Mapping(source = "mentee.id", target = "menteeId")
     @Mapping(source = "mentee.name", target = "menteeName")
     ReviewResponse toResponseDto(MentorReview review);

@@ -12,10 +12,6 @@ import java.time.LocalDateTime;
 public class ReviewResponse {
     private Long id;
 
-    private Long mentorId;
-
-    private String mentorName;
-
     private Long menteeId;
 
     private String menteeName;
