@@ -10,12 +10,15 @@ import com.example.lifedebug.domain.board.repository.BoardRepository;
 import com.example.lifedebug.domain.board.repository.CommentRepository;
 import com.example.lifedebug.domain.board.service.BoardService;
 import com.example.lifedebug.domain.board.service.CommentService;
+import com.example.lifedebug.domain.user.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +47,15 @@ public class BoardController {
 
     // 게시글 작성
     @PostMapping("/board/create")              // userId??, authorRole, title, content, isprivate
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostDto request) {
-        return ResponseEntity.ok(boardService.createPost(request));
+    public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto request) {
+        String loginId = userDetails.getUsername();
+        String role = null;
+        if (userDetails instanceof CustomUserDetails customUserDetails) {
+            role = customUserDetails.getRole();
+        } else {
+            throw new IllegalStateException("Unexpected userDetails type");
+        }
+        return ResponseEntity.ok(boardService.createPost(loginId, role, request)); // getUsername이 loginId??
     }
 
     // 게시글 삭제
@@ -57,12 +67,20 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/board/edit/{postId}")                  // userId??, authorRole, title, content, isprivate
-    public ResponseEntity<PostResponse> editPost(@PathVariable Long postId, @RequestBody PostDto request) {
-        return ResponseEntity.ok(boardService.editPost2(postId, request));
+    public ResponseEntity<PostResponse> editPost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId, @RequestBody PostDto request) {
+        String loginId = userDetails.getUsername();
+        String role = null;
+        if (userDetails instanceof CustomUserDetails customUserDetails) {
+            role = customUserDetails.getRole();
+        } else {
+            throw new IllegalStateException("Unexpected userDetails type");
+        }
+
+        return ResponseEntity.ok(boardService.editPost2(loginId, role, postId, request));
     }
 
     // 댓글 작성
-    @PostMapping("/comment/create")                     // postid, content, authorRole, 작성자id??
+    @PostMapping("/comment/create")                     //    작성자id??, postid, content, authorRole
     public ResponseEntity<CommentResponse> createComment(@RequestBody CommentDto request) {
         return ResponseEntity.ok(commentService.createComment(request));
     }

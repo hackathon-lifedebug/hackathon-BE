@@ -3,14 +3,23 @@ package com.example.lifedebug.domain.board.service;
 
 import com.example.lifedebug.domain.board.dto.CommentDto;
 import com.example.lifedebug.domain.board.dto.CommentResponse;
+import com.example.lifedebug.domain.board.entity.AuthorRole;
 import com.example.lifedebug.domain.board.entity.Comment;
 import com.example.lifedebug.domain.board.entity.Post;
 import com.example.lifedebug.domain.board.mapper.CommentMapper;
 import com.example.lifedebug.domain.board.repository.BoardRepository;
 import com.example.lifedebug.domain.board.repository.CommentRepository;
+import com.example.lifedebug.domain.user.entity.Mentee;
+import com.example.lifedebug.domain.user.entity.Mentor;
+import com.example.lifedebug.domain.user.repository.MenteeRepository;
+import com.example.lifedebug.domain.user.repository.MentorRepository;
+import com.example.lifedebug.domain.user.service.MenteeService;
+import com.example.lifedebug.domain.user.service.MentorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -19,6 +28,10 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final CommentMapper commentMapper;
+    private final MentorRepository mentorRepository;
+    private final MenteeRepository menteeRepository;
+    private final MentorService mentorService;
+    private final MenteeService menteeService;
 
     public CommentResponse createComment(CommentDto dto) {
         Post post = boardRepository.findById(dto.getPostId())
@@ -29,11 +42,27 @@ public class CommentService {
         comment.setContent(dto.getContent());
         comment.setAuthorRole(dto.getAuthorRole());
 
+
+        AuthorRole authorRole = dto.getAuthorRole();
+        Mentor mentor = null;
+        Mentee mentee = null;
+        if(authorRole == AuthorRole.MENTOR){
+            mentor = mentorService.findById(dto.getMentorId());
+        }
+        else {
+            mentee = menteeService.findById(dto.getMenteeId());
+        }
+        comment.setMentor(mentor);
+        comment.setMentee(mentee);
+
         post.getComments().add(comment);
 
         commentRepository.save(comment);
 
-        return commentMapper.toResponse(comment);
+        CommentResponse commentResponse = commentMapper.toResponse(comment);
+        commentResponse.setWriterName(authorRole == AuthorRole.MENTOR ? mentor.getName() : mentee.getName());
+
+        return commentResponse;
 
 
     }
@@ -49,6 +78,9 @@ public class CommentService {
         // 별도로 commentRepository.delete()는 호출하지 않아도 됨
     }
 
-
+    // comment post별 조회
+    public List<CommentResponse> getComments(Post post){
+        return commentRepository.findAllByPost(post).stream().map(commentMapper::toResponse).toList();
+    }
 
 }
