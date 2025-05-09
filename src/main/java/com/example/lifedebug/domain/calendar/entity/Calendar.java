@@ -6,7 +6,9 @@ import com.example.lifedebug.global.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -29,7 +31,7 @@ public class Calendar extends BaseEntity {
 
     private String title;
 
-    private String description;
+    private LocalDate date;
 
-    private LocalDateTime startAt;
+    private LocalTime startAt;
 }
