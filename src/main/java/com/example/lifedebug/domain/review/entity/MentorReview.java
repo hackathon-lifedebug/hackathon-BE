@@ -1,7 +1,7 @@
 package com.example.lifedebug.domain.review.entity;
 
-import com.example.lifedebug.domain.mentee.entity.Mentee;
-import com.example.lifedebug.domain.mentor.entity.Mentor;
+import com.example.lifedebug.domain.user.entity.Mentee;
+import com.example.lifedebug.domain.user.entity.Mentor;
 import com.example.lifedebug.global.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.example.lifedebug.domain.mentor.entity;
+package com.example.lifedebug.domain.user.entity;
 
 import com.example.lifedebug.global.util.entity.BaseEntity;
 import com.example.lifedebug.global.util.entity.City;
