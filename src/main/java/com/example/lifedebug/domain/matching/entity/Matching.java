@@ -25,5 +25,6 @@ public class Matching extends BaseEntity {
     @JoinColumn(name = "mentee_id", nullable = false)
     private Mentee mentee;
 
+    @Enumerated(EnumType.STRING)
     private MatchingStatus status;
 }

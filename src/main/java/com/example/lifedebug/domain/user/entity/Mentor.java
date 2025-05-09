@@ -1,13 +1,10 @@
 package com.example.lifedebug.domain.user.entity;
 
 import com.example.lifedebug.global.util.entity.BaseEntity;
-import com.example.lifedebug.global.util.entity.City;
-import com.example.lifedebug.global.util.entity.Gender;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mentor extends BaseEntity {
+public class Mentor extends BaseEntity implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,15 +27,35 @@ public class Mentor extends BaseEntity {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private City city;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "mentor_subjects", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Column(name = "subject")
+    private List<Subject> subjects;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "mentor_languages", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Column(name = "language")
+    private List<Language> languages;
+
+    private Double rating;
+
+    private Integer reviewCnt;
 
     private String profileImage;
 
     private String description;
 
-    private int level;
-
     private boolean isActive;
+
+    @Override
+    public String getRole() {
+        return "MENTOR";
+    }
 }

@@ -32,6 +32,4 @@ public class Calendar extends BaseEntity {
     private String description;
 
     private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
 }
