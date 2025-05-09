@@ -15,4 +15,9 @@ public class MenteeService {
         return menteeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘티를 찾을 수 없습니다. ID: " + id));
     }
+
+    public Mentee findByLoginId(String loginId){
+        return menteeRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘티를 찾을 수 없습니다. ID: " + loginId));
+    }
 }
