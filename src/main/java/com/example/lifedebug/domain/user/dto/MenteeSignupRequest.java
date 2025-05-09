@@ -1,7 +1,7 @@
 package com.example.lifedebug.domain.user.dto;
 
-import com.example.lifedebug.global.util.entity.City;
-import com.example.lifedebug.global.util.entity.Gender;
+import com.example.lifedebug.domain.user.entity.City;
+import com.example.lifedebug.domain.user.entity.Gender;
 
 import lombok.*;
 

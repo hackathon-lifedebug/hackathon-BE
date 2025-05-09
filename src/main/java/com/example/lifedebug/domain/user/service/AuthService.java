@@ -43,6 +43,8 @@ public class AuthService {
                 .phone(request.getPhone())
                 .gender(request.getGender())
                 .city(request.getCity())
+                .languages(request.getLanguages())
+                .subjects(request.getSubjects())
                 .profileImage(request.getProfileImage())
                 .description(request.getDescription())
                 .isActive(true)
