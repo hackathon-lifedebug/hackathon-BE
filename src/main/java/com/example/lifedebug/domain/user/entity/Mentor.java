@@ -3,10 +3,7 @@ package com.example.lifedebug.domain.user.entity;
 import com.example.lifedebug.global.util.entity.BaseEntity;
 import com.example.lifedebug.global.util.entity.City;
 import com.example.lifedebug.global.util.entity.Gender;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -15,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mentor extends BaseEntity {
+public class Mentor extends BaseEntity implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +27,7 @@ public class Mentor extends BaseEntity {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private City city;
@@ -41,4 +39,9 @@ public class Mentor extends BaseEntity {
     private int level;
 
     private boolean isActive;
+
+    @Override
+    public String getRole() {
+        return "MENTOR";
+    }
 }

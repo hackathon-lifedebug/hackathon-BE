@@ -22,7 +22,7 @@ public class MentorReview extends BaseEntity {
     private Mentor mentor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mentor_id", nullable = false)
+    @JoinColumn(name = "mentee_id", nullable = false)
     private Mentee mentee;
 
     private int rating;

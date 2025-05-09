@@ -24,7 +24,7 @@ public class SwaggerConfig {
 
     private Info apiInfo(){
         return new Info()
-                .title("해커톤 주제~~ API")
+                .title("이민자를 위한 한국 문화 멘토-멘티 플랫폼 API")
                 .description("25-1 해커톤 인생디버깅팀")
                 .version("1.0.0");
     }
