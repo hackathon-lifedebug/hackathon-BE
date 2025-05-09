@@ -4,6 +4,8 @@ import com.example.lifedebug.domain.user.dto.MentorSearchRequest;
 import com.example.lifedebug.domain.user.dto.MentorSearchResponse;
 import com.example.lifedebug.domain.user.entity.Mentor;
 import com.example.lifedebug.domain.user.repository.MentorRepository;
+import com.example.lifedebug.global.code.ErrorCode;
+import com.example.lifedebug.global.exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +21,12 @@ public class MentorService {
 
     public Mentor findById(Long id){
         return mentorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘토를 찾을 수 없습니다. ID: " + id));
+                .orElseThrow(() -> new CustomException(ErrorCode.MENTOR_NOT_FOUND));
     }
 
     public Mentor findByLoginId(String loginId){
         return mentorRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 멘토를 찾을 수 없습니다. ID: " + loginId));
+                .orElseThrow(() -> new CustomException(ErrorCode.MENTOR_NOT_FOUND));
     }
 
     public Page<MentorSearchResponse> searchMentors(MentorSearchRequest request, Pageable pageable) {
