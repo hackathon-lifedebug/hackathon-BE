@@ -1,8 +1,11 @@
 package com.example.lifedebug.domain.calendar.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -16,7 +19,8 @@ public class CalendarResponse {
 
     private String title;
 
-    private String description;
+    private LocalDate date;
 
-    private LocalDateTime startAt;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime startAt;
 }
