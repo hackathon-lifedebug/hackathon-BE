@@ -21,7 +21,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CalendarResponse>> createSchedule(@AuthenticationPrincipal UserDetails userDetails, CalendarRequest request){
+    public ResponseEntity<ApiResponse<CalendarResponse>> createSchedule(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CalendarRequest request){
         String loginId = userDetails.getUsername();
         CalendarResponse response = calendarService.saveSchedule(loginId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -32,13 +32,7 @@ public class CalendarController {
     public ResponseEntity<ApiResponse<List<CalendarResponse>>> getSchedules(@AuthenticationPrincipal UserDetails userDetails,
                                                                @RequestParam int year, @RequestParam int month){
         String loginId = userDetails.getUsername();
-        String role = null;
-        if (userDetails instanceof CustomUserDetails customUserDetails) {
-            role = customUserDetails.getRole();
-        } else {
-            throw new IllegalStateException("Unexpected userDetails type");
-        }
-        List<CalendarResponse> response = calendarService.findSchedules(loginId, role, year, month);
+        List<CalendarResponse> response = calendarService.findSchedules(loginId, year, month);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<CalendarResponse>>builder().success(200).message("캘린더 월별 조회에 성공했습니다.").data(response).build());
     }
