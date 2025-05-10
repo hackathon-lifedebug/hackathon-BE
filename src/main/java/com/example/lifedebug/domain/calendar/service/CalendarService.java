@@ -37,19 +37,14 @@ public class CalendarService {
         return calendarMapper.toResponseDto(calendar);
     }
 
-    public List<CalendarResponse> findSchedules(String loginId, String role, int year, int month){
+    public List<CalendarResponse> findSchedules(String loginId, int year, int month){
+        Mentor mentor = mentorService.findByLoginId(loginId);
         LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
         LocalDateTime endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.toLocalDate().lengthOfMonth())
                 .withHour(23).withMinute(59).withSecond(59);
 
-        List<Calendar> calendars = new ArrayList<>();
-        if (role.equals("MENTOR")) {
-            Mentor mentor = mentorService.findByLoginId(loginId);
-            calendars = calendarRepository.findAllByMentorAndStartAtBetweenOrderByStartAtAsc(mentor, startOfMonth, endOfMonth);
-        } else if (role.equals("MENTEE")) {
-            Mentee mentee = menteeService.findByLoginId(loginId);
-            calendars = calendarRepository.findAllByMenteeAndStartAtBetweenOrderByStartAtAsc(mentee, startOfMonth, endOfMonth);
-        }
+        List<Calendar> calendars = calendarRepository.findAllByMentorAndStartAtBetweenOrderByStartAtAsc(mentor, startOfMonth, endOfMonth);
+
         return calendars.stream().map(calendarMapper::toResponseDto).toList();
     }
 }
