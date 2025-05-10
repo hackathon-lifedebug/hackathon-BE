@@ -62,7 +62,7 @@ public class CommentService {
         CommentResponse commentResponse = commentMapper.toResponse(comment);
         commentResponse.setWriterName(authorRole == AuthorRole.MENTOR ? mentor.getName() : mentee.getName());
 
-        return commentResponse;
+        return commentResponse; // writerName 저장 못 했어 ,,
 
 
     }
