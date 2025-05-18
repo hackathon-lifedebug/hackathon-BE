@@ -35,7 +35,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        int prevCnt = mentor.getReviewCnt() != null ? mentor.getReviewCnt() : 0;
+        int prevCnt = mentor.getReviewCnt() != null ? mentor.getReviewCnt() : 0; //
         double prevRating = mentor.getRating() != null ? mentor.getRating() : 0.0;
         int newCnt = prevCnt + 1;
         double newRating = ((prevRating * prevCnt) + review.getRating()) / newCnt;

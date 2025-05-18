@@ -68,9 +68,11 @@ public class SecurityConfig {
                 // http basic 인증 방식 disable
                 .httpBasic(auth -> auth.disable())
 
-                // 인가 처리
+                // 인가 처리. 로그인 필요한지 아닌지
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("v3/api-docs/**",
+                        .requestMatchers(
+                                "/",
+                                "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
