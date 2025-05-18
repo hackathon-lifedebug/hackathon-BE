@@ -1,11 +1,10 @@
 package com.example.lifedebug.domain.board.controller;
 
 
-import com.example.lifedebug.domain.board.dto.CommentDto;
+import com.example.lifedebug.domain.board.dto.CommentRequest;
 import com.example.lifedebug.domain.board.dto.CommentResponse;
-import com.example.lifedebug.domain.board.dto.PostDto;
+import com.example.lifedebug.domain.board.dto.PostRequest;
 import com.example.lifedebug.domain.board.dto.PostResponse;
-import com.example.lifedebug.domain.board.entity.Post;
 import com.example.lifedebug.domain.board.repository.BoardRepository;
 import com.example.lifedebug.domain.board.repository.CommentRepository;
 import com.example.lifedebug.domain.board.service.BoardService;
@@ -19,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,7 +45,7 @@ public class BoardController {
 
     // 게시글 작성
     @PostMapping("/board/create")              // userId??, authorRole, title, content, isprivate
-    public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto request) {
+    public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostRequest request) {
         String loginId = userDetails.getUsername();
         String role = null;
         if (userDetails instanceof CustomUserDetails customUserDetails) {
@@ -67,7 +65,7 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/board/edit/{postId}")                  // userId??, authorRole, title, content, isprivate
-    public ResponseEntity<PostResponse> editPost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId, @RequestBody PostDto request) {
+    public ResponseEntity<PostResponse> editPost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId, @RequestBody PostRequest request) {
         String loginId = userDetails.getUsername();
         String role = null;
         if (userDetails instanceof CustomUserDetails customUserDetails) {
@@ -81,7 +79,7 @@ public class BoardController {
 
     // 댓글 작성
     @PostMapping("/comment/create")                     //    작성자id??, postid, content, authorRole
-    public ResponseEntity<CommentResponse> createComment(@RequestBody CommentDto request) {
+    public ResponseEntity<CommentResponse> createComment(@RequestBody CommentRequest request) {
         return ResponseEntity.ok(commentService.createComment(request));
     }
 

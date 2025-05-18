@@ -1,7 +1,7 @@
 package com.example.lifedebug.domain.board.service;
 
 
-import com.example.lifedebug.domain.board.dto.CommentDto;
+import com.example.lifedebug.domain.board.dto.CommentRequest;
 import com.example.lifedebug.domain.board.dto.CommentResponse;
 import com.example.lifedebug.domain.board.entity.AuthorRole;
 import com.example.lifedebug.domain.board.entity.Comment;
@@ -33,7 +33,7 @@ public class CommentService {
     private final MentorService mentorService;
     private final MenteeService menteeService;
 
-    public CommentResponse createComment(CommentDto dto) {
+    public CommentResponse createComment(CommentRequest dto) {
         Post post = boardRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
 

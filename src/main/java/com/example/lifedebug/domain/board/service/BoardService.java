@@ -1,6 +1,6 @@
 package com.example.lifedebug.domain.board.service;
 
-import com.example.lifedebug.domain.board.dto.PostDto;
+import com.example.lifedebug.domain.board.dto.PostRequest;
 import com.example.lifedebug.domain.board.dto.PostResponse;
 import com.example.lifedebug.domain.board.entity.AuthorRole;
 import com.example.lifedebug.domain.board.entity.Post;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -27,7 +25,7 @@ public class BoardService {
     private final MenteeService menteeService;
     private final CommentService commentService;
 
-    public PostResponse createPost(String loginId, String role, PostDto postDto) {
+    public PostResponse createPost(String loginId, String role, PostRequest postDto) {
         Mentor mentor = null;
         Mentee mentee = null;
         AuthorRole authorRole = null;
@@ -77,7 +75,7 @@ public class BoardService {
         return postMapper.toResponse(result);
     }
 
-    public PostResponse editPost2(String loginId, String role, Long postid, PostDto postDto) {
+    public PostResponse editPost2(String loginId, String role, Long postid, PostRequest postRequest) {
         AuthorRole authorRole = null;
         Mentor mentor = null;
         Mentee mentee = null;
@@ -89,16 +87,16 @@ public class BoardService {
             authorRole = AuthorRole.MENTOR;
         }
 
-        Mentor broadOwner = mentorService.findById(postDto.mentorId);
+        Mentor broadOwner = mentorService.findById(postRequest.mentorId);
 
         Post post = new Post();
         post.setId(postid);
         post.setAuthorRole(authorRole);
-        post.setTitle(postDto.title);
-        post.setContent(postDto.content);
-        post.setPrivate(postDto.isPrivate);
+        post.setTitle(postRequest.title);
+        post.setContent(postRequest.content);
+        post.setPrivate(postRequest.isPrivate);
         //post.setBoardOwner(auth.get ??);
-        post.setBoardOwner(broadOwner); // ✅ 직접 조회해서 설정
+        post.setBoardOwner(broadOwner); // 직접 조회해서 설정
         post.setMentor(mentor);
         post.setMentee(mentee);
 

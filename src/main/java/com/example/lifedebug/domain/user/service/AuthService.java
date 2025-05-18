@@ -35,7 +35,7 @@ public class AuthService {
     public void signupMentor(MentorSignupRequest request) {
         if (mentorRepository.existsByLoginId(request.getLoginId()) || menteeRepository.existsByLoginId(request.getLoginId())) {
             throw new CustomException(ErrorCode.DUPLICATE_LOGIN_ID);
-        }
+        } // 중복검사
 
         Mentor mentor = Mentor.builder()
                 .loginId(request.getLoginId())

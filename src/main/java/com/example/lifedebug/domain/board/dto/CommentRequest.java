@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CommentDto {
+public class CommentRequest {
     private Long postId;
     private AuthorRole authorRole;
     private String content;
